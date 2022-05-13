@@ -1,11 +1,13 @@
 
-import { Grid } from '@mui/material';
+import { Grid, useMediaQuery } from '@mui/material';
 import AdicionaMusica from './components/AdicionaMusica';
 import Header from './components/Header';
 import ListaMusica from './components/ListaMusica';
 import TocadorMusica from './components/TocadorMusica';
 
 function App() {
+  const telaGrande = useMediaQuery('(min-width:900px)');
+
   return (
     <>
       <Header />
@@ -14,7 +16,14 @@ function App() {
           <AdicionaMusica />
           <ListaMusica />
         </Grid>
-        <Grid item md={5}  xs={12}>
+        <Grid style={
+          telaGrande ? {position: 'fixed', width: '100%', right: 0, top: 80 } : 
+          {position: 'fixed', width : '100%', left: 0, bottom: 10 }
+        } 
+        
+        
+        item md={5} xs={12}>
+          
           <TocadorMusica />
         </Grid>
       </Grid>

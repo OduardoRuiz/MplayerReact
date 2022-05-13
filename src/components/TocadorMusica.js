@@ -1,5 +1,5 @@
 import { PlayArrow, SkipNext, SkipPrevious } from '@mui/icons-material';
-import { Card, CardActions, CardContent, CardMedia, IconButton, Slider, Typography } from '@mui/material';
+import { Card, CardActions, CardContent, CardMedia, IconButton, Slider, Typography, useMediaQuery } from '@mui/material';
 import React from 'react'
 import FilaMusica from './FilaMusica';
 
@@ -7,6 +7,8 @@ import FilaMusica from './FilaMusica';
 
 
 export default function TocadorMusica() {
+
+    const telaGrande = useMediaQuery('(min-width: 900px)');
 
     return (
 
@@ -28,7 +30,12 @@ export default function TocadorMusica() {
                 <Slider type="range" min={0} max={1} step={0.01} style={{marginLeft: '30px', width: '90%'}} />
 
             </Card>
-            <FilaMusica />
+            {
+
+                telaGrande &&
+                <FilaMusica />
+
+            }
         </>
 
     )

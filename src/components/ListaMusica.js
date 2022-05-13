@@ -1,30 +1,38 @@
+import { useQuery } from '@apollo/client';
 import { PlayArrow, QueueMusic } from '@mui/icons-material';
 import { Card, CardActions, CardContent, CardMedia, IconButton, Typography } from '@mui/material'
 import React from 'react'
+import { GET_SONGS } from '../graphql/query';
 
 
 
 
 export default function ListaMusica() {
 
-    const musicaFake = {
-        titulo: 'Titulo da Musica',
-        artista: 'Artista da musica',
-        imagem: 'https://pbs.twimg.com/profile_images/1217784855368470531/epouecHA_400x400.jpg'
+    const { data, loading, error } = useQuery(GET_SONGS)
+
+    if (loading) {
+
+        return <div>Carregando...</div>
+    }
+    if (error) {
+
+        console.log(error + "<<<erro")
+        return <div>ERRO</div>
     }
 
 
     function Musica({ musica }) {
-        const { imagem, artista, titulo } = musica;
+        const { thumbnail, artist, title } = musica;
 
         return (
-            <Card style={{ display: 'flex', alignItems: 'center', margin: '10px'}}>
+            <Card style={{ display: 'flex', alignItems: 'center', margin: '10px' }}>
 
-                <CardMedia image={imagem} style={{ objectFit: 'cover', width: '140px', height: '140px' }} />
+                <CardMedia image={thumbnail} style={{ objectFit: 'cover', width: '140px', height: '140px' }} />
                 <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                     <CardContent>
-                        <Typography variant='h5' component="h2" >{titulo}</Typography>
-                        <Typography variant='subtitle1' component="h3">{artista}</Typography>
+                        <Typography variant='h5' component="h2" >{title}</Typography>
+                        <Typography variant='subtitle1' component="h3">{artist}</Typography>
 
                     </CardContent>
                     <CardActions>
@@ -42,9 +50,9 @@ export default function ListaMusica() {
 
         <div>
 
-            {Array.from({ length: 15 }, () => musicaFake).map((musica, index) => {
+            {data.musica.map((musica) => {
 
-                return (<Musica key={index} musica={musica} />)
+                return (<Musica key={musica.id} musica={musica} />)
             })
             }
         </div>
