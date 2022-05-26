@@ -1,6 +1,6 @@
 import { SubscriptionsTwoTone } from '@mui/icons-material';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
-import React, { useEffect } from 'react';
+import React from 'react';
 import YouTubePlayer from 'react-player/youtube';
 import ReactPlayer from 'react-player';
 import { useMutation } from '@apollo/client';

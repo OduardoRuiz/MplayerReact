@@ -4,7 +4,7 @@ import AdicionaMusica from './components/AdicionaMusica';
 import Header from './components/Header';
 import ListaMusica from './components/ListaMusica';
 import TocadorMusica from './components/TocadorMusica';
-import { queueReducer, songReducer } from './reducer'
+import { songReducer, queueReducer } from './reducer'
 
 export const SongContext = React.createContext({
   song: {
@@ -23,7 +23,6 @@ export default function App() {
   const initialSong = React.useContext(SongContext);
   const [currentQueue, queueDispatch] = React.useReducer(queueReducer, []);
   const [currentSong, songDispatch] = React.useReducer(songReducer, initialSong);
-  
 
   return (
     <SongContext.Provider value={{currentSong, songDispatch}}>
@@ -31,7 +30,7 @@ export default function App() {
       <Grid container style={{marginTop: '80px'}}>
         <Grid item md={7} xs={12} >
           <AdicionaMusica />
-          <ListaMusica queue={{ queueDispatch}} />
+          <ListaMusica queue={{ queueDispatch }} />
         </Grid>
         <Grid style={
             telaGrande ? 
