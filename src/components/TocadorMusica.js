@@ -14,6 +14,20 @@ export default function TocadorMusica({ queue }) {
     const [playedSeconds, setPlayedSeconds] = React.useState(0);
     const [posicaoNafila, setPosicaoNafila] = React.useState(0);
 
+
+    React.useEffect(() => {
+        const songIndex = queue.currentQueue.findIndex((song) => song.id === currentSong.song.id);
+        setPosicaoNafila(songIndex);
+    }, [queue, currentSong.song.id]);
+
+    React.useEffect(() => {
+        const nextSong = queue.currentQueue[posicaoNafila + 1];
+        if (nextSong && played > 0.99)
+            songDispatch({ type: "CHANGE_SONG", payload: { musica: nextSong } })
+
+    }, [played]);
+
+
     function handlePlayButton() {
         songDispatch({ type: currentSong.isPlaying ? "PAUSE_SONG" : "PLAY_SONG" });
     }
@@ -23,14 +37,14 @@ export default function TocadorMusica({ queue }) {
 
         if (!changing)
             setPlayed(played);
-        
 
-    setPlayedSeconds(playedSeconds);
+
+        setPlayedSeconds(playedSeconds);
 
 
     }
 
-    function handleSliderChange(event,newValue) {
+    function handleSliderChange(event, newValue) {
 
         setPlayed(newValue);
         reactPlayerRef.current.seekTo(played);
@@ -49,6 +63,23 @@ export default function TocadorMusica({ queue }) {
 
     }
 
+    function handleSongPrevious() {
+console.log(posicaoNafila);
+        const nextSong = queue.currentQueue[posicaoNafila - 1];
+        if (nextSong)
+            songDispatch({ type: "CHANGE_SONG", payload: { musica: nextSong } })
+    }
+
+    function handleSongNext() {
+        const nextSong = queue.currentQueue[posicaoNafila + 1];
+        if (nextSong)
+            songDispatch({ type: "CHANGE_SONG", payload: { musica: nextSong } })
+    }
+
+
+
+
+
 
     return (
         <>
@@ -59,13 +90,13 @@ export default function TocadorMusica({ queue }) {
                         <Typography variant="subtitle1" component="h3">{currentSong.song.artist}</Typography>
                     </CardContent>
                     <CardActions>
-                        <IconButton><SkipPrevious /></IconButton>
+                        <IconButton onClick={handleSongPrevious}><SkipPrevious /></IconButton>
                         <IconButton onClick={handlePlayButton}>
                             {currentSong.isPlaying ? <Pause style={{ fontSize: '40px' }} /> : <PlayArrow style={{ fontSize: '40px' }} />}
                         </IconButton>
-                        <IconButton><SkipNext /></IconButton>
+                        <IconButton onClick={handleSongNext}><SkipNext /></IconButton>
                         <Typography>
-                            {new Date( playedSeconds * 1000).toISOString().substr(11,8)}
+                            {new Date(playedSeconds * 1000).toISOString().substr(11, 8)}
                         </Typography>
                     </CardActions>
                     <CardMedia style={{ width: '140px', height: '140px' }} image={currentSong.song.thumbnail} />
@@ -73,7 +104,7 @@ export default function TocadorMusica({ queue }) {
                 <Slider key="slider" value={played} type="range" min={0} max={1} step={0.01} style={{ marginLeft: '30px', width: '90%' }}
                     onChange={handleSliderChange} onMouseDown={handleSliderChanging} onMouseUp={handleSliderChanged}
                 />
-                <ReactPlayer ref={reactPlayerRef}  hidden url={currentSong.song.url} playing={currentSong.isPlaying} onProgress={handleSongProgress} />
+                <ReactPlayer ref={reactPlayerRef} hidden url={currentSong.song.url} playing={currentSong.isPlaying} onProgress={handleSongProgress} />
             </Card>
             {
                 telaGrande &&
